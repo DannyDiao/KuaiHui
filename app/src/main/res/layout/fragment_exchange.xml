@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Exchange_Card"
+        tools:targetApi="LOLLIPOP"
+        android:layout_margin="10dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="4dp"
+        app:cardUseCompatPadding="true"
+        app:cardPreventCornerOverlap="false">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/Line_1">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:maxWidth="28dp"
+                android:maxHeight="28dp"
+                android:src="@drawable/huobi"
+                android:id="@+id/Image_huobi"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="原始货币"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_toRightOf="@id/Image_huobi"
+                android:layout_marginLeft="8dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/Line_2"
+            android:layout_below="@id/Line_1"
+            android:layout_marginTop="12dp">
+            <Spinner
+                android:layout_width="160dp"
+                android:layout_height="50dp"
+                android:id="@+id/Currency_Selector"></Spinner>
+
+
+           <EditText
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginLeft="8dp"
+               android:singleLine="true"
+               android:hint="货币数量"
+               android:layout_toRightOf="@id/Currency_Selector"/>
+
+        </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:id="@+id/Line_3"
+                android:layout_below="@id/Line_2">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:theme="@style/AppTheme"
+                    android:text="兑换"
+                    android:id="@+id/exchange_button"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+    
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recycler_view"
+        android:layout_below="@id/Exchange_Card"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="10dp">
+
+    </android.support.v7.widget.RecyclerView>
+</RelativeLayout>
+
+</FrameLayout>

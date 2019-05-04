@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Currency_Selector" >
+        <item>人民币</item>
+        <item>美元</item>
+        <item>港币</item>
+        <item>欧元</item>
+        <item>日元</item>
+        <item>英镑</item>
+        <item>韩元</item>
+        <item>加拿大元</item>
+        <item>澳大利亚元</item>
+        <item>新台币</item>
+    </string-array>
+</resources>
