@@ -32,7 +32,7 @@ public class ExchangeFragment extends Fragment {
     Spinner spinner;
     RecyclerView recyclerView;
     String CurrencySelected = "CNY";
-    Button excahngeButton;
+    Button exchangeButton;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,6 +76,38 @@ public class ExchangeFragment extends Fragment {
         //初始化数据
         initTitle();
         initCurrency();
+
+        //绑定按钮
+        exchangeButton = v.findViewById(R.id.exchange_button);
+        //监听点击事件
+        exchangeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "http://api.k780.com/?app=finance.rate&scur=" + CurrencySelected + "&tcur=USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD" +
+                        "&appkey=42125&sign=bcb58eb83ab21f84f80881c1f36be84e";
+                OkHttpClient okHttpClient = new OkHttpClient();
+                final Request request = new Request.Builder()
+                        .url(url)
+                        .get()
+                        .build();
+                Call call = okHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String result = response.body().string();
+                        List<String> refresh = new ArrayList<>();
+                        String[] rate_split = result.split("rate");
+                        int size = rate_split.length;
+                    }
+                });
+            }
+        });
+
 
         //初始化RecyclerView
         recyclerView = v.findViewById(R.id.recycler_view);
@@ -133,25 +165,7 @@ public class ExchangeFragment extends Fragment {
 
             }
         });
-        String url = "http://api.k780.com/?app=finance.rate&scur=" + CurrencySelected + "&tcur=USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD" +
-                "&appkey=42125&sign=bcb58eb83ab21f84f80881c1f36be84e";
-        OkHttpClient okHttpClient = new OkHttpClient();
-        final Request request = new Request.Builder()
-                .url(url)
-                .get()
-                .build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
 
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Log.d("成功","数据：" + response.body().string());
-            }
-        });
 
 
         return v;
@@ -171,15 +185,15 @@ public class ExchangeFragment extends Fragment {
     }
 
     public void initCurrency(){
-        Current.add("6.7");
-        Current.add("6");
-        Current.add("4");
-        Current.add("50");
-        Current.add("10");
-        Current.add("20");
-        Current.add("40");
-        Current.add("80");
-        Current.add("70");
+        Current.add("0");
+        Current.add("0");
+        Current.add("0");
+        Current.add("0");
+        Current.add("0");
+        Current.add("0");
+        Current.add("0");
+        Current.add("0");
+        Current.add("0");
 
     }
 

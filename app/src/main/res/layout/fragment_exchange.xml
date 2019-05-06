@@ -90,17 +90,65 @@
 
 
     </android.support.v7.widget.CardView>
-    
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/recycler_view"
-        android:layout_below="@id/Exchange_Card"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="10dp">
 
-    </android.support.v7.widget.RecyclerView>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Exchange_Card_2"
+        android:layout_below="@id/Exchange_Card"
+        tools:targetApi="LOLLIPOP"
+        android:layout_margin="10dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="4dp"
+        app:cardUseCompatPadding="true"
+        app:cardPreventCornerOverlap="false">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:id="@+id/Line_2_1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:maxWidth="28dp"
+                    android:maxHeight="28dp"
+                    android:src="@drawable/duihuan_2"
+                    android:id="@+id/Image_huilv"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="兑换"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_toRightOf="@id/Image_huilv"
+                    android:layout_marginLeft="8dp"/>
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/recycler_view"
+                android:layout_below="@id/Line_2_1"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp">
+
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+
+
+
+    </android.support.v7.widget.CardView>
+    
+
 </RelativeLayout>
 
 </FrameLayout>
