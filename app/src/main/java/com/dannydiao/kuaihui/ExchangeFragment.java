@@ -3,6 +3,8 @@ package com.dannydiao.kuaihui;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,15 +36,13 @@ public class ExchangeFragment extends Fragment {
     String CurrencySelected = "CNY";
     Button exchangeButton;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
 
 
     public ExchangeFragment() {
@@ -64,8 +64,6 @@ public class ExchangeFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-
-
     }
 
     @Override
@@ -76,6 +74,22 @@ public class ExchangeFragment extends Fragment {
         //初始化数据
         initTitle();
         initCurrency();
+        //初始化RecyclerView
+        recyclerView = v.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        ExchangeListAdapter exchangeListAdapter = new ExchangeListAdapter(Title, Current);
+        recyclerView.setAdapter(exchangeListAdapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+
+        Handler handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (msg.what == 1) {
+                    exchangeListAdapter.notifyDataSetChanged();
+                }
+            }
+        };
 
         //绑定按钮
         exchangeButton = v.findViewById(R.id.exchange_button);
@@ -100,32 +114,45 @@ public class ExchangeFragment extends Fragment {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String result = response.body().string();
-                        List<String> refresh = new ArrayList<>();
-                        String[] rate_split = result.split("rate");
+                        List<String> rate_final = new ArrayList<>();
+                        String[] rate_split = result.split("\"rate\"");
                         int size = rate_split.length;
+
+                        for (int i = 1; i < 10; i++) {
+                            rate_final.add(rate_split[i].substring(2, 8));
+                        }
+                        Log.d("a", "a");
+                        for (int i = 0; i < 9; i++) {
+                            Current.remove(i);
+                            if (rate_final.get(i).equals("1\",\"up")) {
+                                Current.add(i, "1");
+                            } else {
+                                Current.add(i, rate_final.get(i));
+                            }
+                        }
+
+
+                        Message message = handler.obtainMessage();
+                        message.what = 1;
+                        handler.sendMessage(message);
+
                     }
                 });
             }
         });
 
 
-        //初始化RecyclerView
-        recyclerView = v.findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new ExchangeListAdapter(Title,Current));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
-
         //适配Spinner
         spinner = v.findViewById(R.id.Currency_Selector);
         String CurrencyItems[] = getResources().getStringArray(R.array.Currency_Selector);
-        ArrayAdapter<String> Adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,CurrencyItems);
+        ArrayAdapter<String> Adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, CurrencyItems);
         spinner.setAdapter(Adapter);
 
         //监听Spinner
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
+                switch (position) {
                     case 0:
                         CurrencySelected = "CNY";
                         break;
@@ -157,7 +184,7 @@ public class ExchangeFragment extends Fragment {
                         CurrencySelected = "TWD";
                         break;
                 }
-                Log.d("a",CurrencySelected);
+                Log.d("a", CurrencySelected);
             }
 
             @Override
@@ -167,11 +194,10 @@ public class ExchangeFragment extends Fragment {
         });
 
 
-
         return v;
     }
 
-    public void initTitle(){
+    public void initTitle() {
         Title.add("美元 USD");
         Title.add("港币 HKD");
         Title.add("欧元 EUR");
@@ -184,7 +210,7 @@ public class ExchangeFragment extends Fragment {
 
     }
 
-    public void initCurrency(){
+    public void initCurrency() {
         Current.add("0");
         Current.add("0");
         Current.add("0");
@@ -196,7 +222,6 @@ public class ExchangeFragment extends Fragment {
         Current.add("0");
 
     }
-
 
 
 }
