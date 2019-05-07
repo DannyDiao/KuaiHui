@@ -13,7 +13,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/Exchange_Card"
         tools:targetApi="LOLLIPOP"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="3dp"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="4dp"
         app:cardUseCompatPadding="true"
@@ -33,8 +35,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:maxWidth="28dp"
-                android:maxHeight="28dp"
+                android:maxWidth="25dp"
+                android:maxHeight="25dp"
                 android:src="@drawable/huobi"
                 android:id="@+id/Image_huobi"/>
 
@@ -43,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:text="原始货币"
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:layout_toRightOf="@id/Image_huobi"
                 android:layout_marginLeft="8dp"/>
         </RelativeLayout>
@@ -53,7 +55,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/Line_2"
             android:layout_below="@id/Line_1"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="6dp">
             <Spinner
                 android:layout_width="160dp"
                 android:layout_height="50dp"
@@ -63,17 +65,18 @@
            <EditText
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:layout_marginLeft="8dp"
+               android:layout_marginLeft="12dp"
                android:singleLine="true"
                android:hint="货币数量"
-               android:layout_toRightOf="@id/Currency_Selector"/>
+               android:layout_toRightOf="@id/Currency_Selector"
+               android:id="@+id/huobi_count"/>
 
         </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="6dp"
                 android:id="@+id/Line_3"
                 android:layout_below="@id/Line_2">
                 <Button
@@ -97,7 +100,9 @@
         android:id="@+id/Exchange_Card_2"
         android:layout_below="@id/Exchange_Card"
         tools:targetApi="LOLLIPOP"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="5dp"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardCornerRadius="4dp"
         app:cardUseCompatPadding="true"
@@ -117,8 +122,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
-                    android:maxWidth="28dp"
-                    android:maxHeight="28dp"
+                    android:maxWidth="25dp"
+                    android:maxHeight="25dp"
                     android:src="@drawable/duihuan_2"
                     android:id="@+id/Image_huilv"/>
 
@@ -127,7 +132,7 @@
                     android:layout_height="wrap_content"
                     android:text="兑换"
                     android:textStyle="bold"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_toRightOf="@id/Image_huilv"
                     android:layout_marginLeft="8dp"/>
             </RelativeLayout>
@@ -139,7 +144,7 @@
                 android:layout_below="@id/Line_2_1"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="6dp">
 
             </android.support.v7.widget.RecyclerView>
         </RelativeLayout>

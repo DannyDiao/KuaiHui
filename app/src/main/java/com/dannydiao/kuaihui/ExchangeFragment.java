@@ -15,9 +15,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CursorAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +38,7 @@ public class ExchangeFragment extends Fragment {
     RecyclerView recyclerView;
     String CurrencySelected = "CNY";
     Button exchangeButton;
-
+    EditText editText;
 
 
     private static final String ARG_PARAM1 = "param1";
@@ -90,14 +93,21 @@ public class ExchangeFragment extends Fragment {
                 }
             }
         };
-
+        //绑定edittext
+        editText = v.findViewById(R.id.huobi_count);
+        editText.clearFocus();
         //绑定按钮
         exchangeButton = v.findViewById(R.id.exchange_button);
         //监听点击事件
         exchangeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://api.k780.com/?app=finance.rate&scur=" + CurrencySelected + "&tcur=USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD" +
+                //获取兑换货币数量
+                editText.clearFocus();
+                String huobi_count = editText.getText().toString();
+                float huobi_count_1 = Integer.valueOf(huobi_count);
+
+                String url = "http://api.k780.com/?app=finance.rate&scur=" + CurrencySelected + "&tcur=CNY,USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD" +
                         "&appkey=42125&sign=bcb58eb83ab21f84f80881c1f36be84e";
                 OkHttpClient okHttpClient = new OkHttpClient();
                 final Request request = new Request.Builder()
@@ -118,11 +128,11 @@ public class ExchangeFragment extends Fragment {
                         String[] rate_split = result.split("\"rate\"");
                         int size = rate_split.length;
 
-                        for (int i = 1; i < 10; i++) {
+                        for (int i = 1; i < 11; i++) {
                             rate_final.add(rate_split[i].substring(2, 8));
                         }
-                        Log.d("a", "a");
-                        for (int i = 0; i < 9; i++) {
+
+                        for (int i = 0; i < 10; i++) {
                             Current.remove(i);
                             if (rate_final.get(i).equals("1\",\"up")) {
                                 Current.add(i, "1");
@@ -130,8 +140,16 @@ public class ExchangeFragment extends Fragment {
                                 Current.add(i, rate_final.get(i));
                             }
                         }
+                        float temp;
 
+                        for (int i = 0; i < 10; i++) {
+                            temp = Float.valueOf(Current.get(i)) * huobi_count_1;
+                            Current.remove(i);
+                            Current.add(i,String.valueOf(temp));
 
+                        }
+
+                        //发送消息到主线程，通知刷新UI
                         Message message = handler.obtainMessage();
                         message.what = 1;
                         handler.sendMessage(message);
@@ -198,6 +216,7 @@ public class ExchangeFragment extends Fragment {
     }
 
     public void initTitle() {
+        Title.add("人民币 CNY");
         Title.add("美元 USD");
         Title.add("港币 HKD");
         Title.add("欧元 EUR");
@@ -211,6 +230,7 @@ public class ExchangeFragment extends Fragment {
     }
 
     public void initCurrency() {
+        Current.add("0");
         Current.add("0");
         Current.add("0");
         Current.add("0");
