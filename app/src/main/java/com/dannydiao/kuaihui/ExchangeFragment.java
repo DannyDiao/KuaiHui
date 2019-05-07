@@ -18,9 +18,12 @@ import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +80,7 @@ public class ExchangeFragment extends Fragment {
         //初始化数据
         initTitle();
         initCurrency();
+        TextView refresh_time = v.findViewById(R.id.refresh_time);
         //初始化RecyclerView
         recyclerView = v.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -84,12 +88,14 @@ public class ExchangeFragment extends Fragment {
         recyclerView.setAdapter(exchangeListAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
+
         Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == 1) {
                     exchangeListAdapter.notifyDataSetChanged();
+                    refresh_time.setText(msg.obj.toString());
                 }
             }
         };
@@ -105,7 +111,7 @@ public class ExchangeFragment extends Fragment {
                 //获取兑换货币数量
                 editText.clearFocus();
                 String huobi_count = editText.getText().toString();
-                float huobi_count_1 = Integer.valueOf(huobi_count);
+                float huobi_count_1 = Float.valueOf(huobi_count);
 
                 String url = "http://api.k780.com/?app=finance.rate&scur=" + CurrencySelected + "&tcur=CNY,USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD" +
                         "&appkey=42125&sign=bcb58eb83ab21f84f80881c1f36be84e";
@@ -124,6 +130,8 @@ public class ExchangeFragment extends Fragment {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String result = response.body().string();
+
+                        //解析出汇率结果
                         List<String> rate_final = new ArrayList<>();
                         String[] rate_split = result.split("\"rate\"");
                         int size = rate_split.length;
@@ -143,15 +151,21 @@ public class ExchangeFragment extends Fragment {
                         float temp;
 
                         for (int i = 0; i < 10; i++) {
-                            temp = Float.valueOf(Current.get(i)) * huobi_count_1;
+                            temp = (float)Float.valueOf(Current.get(i)) * huobi_count_1;
                             Current.remove(i);
+                            //保留两位小数
+                            temp = (float)(Math.round(temp*100))/100;
                             Current.add(i,String.valueOf(temp));
 
                         }
 
+                        //解析出刷新时间
+                        String[] refresh_time_split = result.split("\"update\":\"");
+                        String refresh_time = refresh_time_split[1].substring(0,19);
                         //发送消息到主线程，通知刷新UI
                         Message message = handler.obtainMessage();
                         message.what = 1;
+                        message.obj = refresh_time;
                         handler.sendMessage(message);
 
                     }

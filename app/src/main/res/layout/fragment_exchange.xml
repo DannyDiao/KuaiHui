@@ -44,6 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="原始货币"
+                android:textColor="#000000"
                 android:textStyle="bold"
                 android:textSize="18sp"
                 android:layout_toRightOf="@id/Image_huobi"
@@ -130,18 +131,40 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="兑换"
+                    android:text="兑换结果"
+                    android:textColor="#000000"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:layout_toRightOf="@id/Image_huilv"
                     android:layout_marginLeft="8dp"/>
             </RelativeLayout>
+            <LinearLayout
+                android:layout_marginLeft="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/Line_2_2"
+                android:orientation="horizontal"
+                android:layout_below="@id/Line_2_1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="汇率更新时间:"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/refresh_time"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
 
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/recycler_view"
-                android:layout_below="@id/Line_2_1"
+                android:layout_below="@id/Line_2_2"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="6dp">
