@@ -4,8 +4,8 @@
     android:layout_width="match_parent">
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
 
            android:layout_alignBottom="@id/List_Title"
             android:id="@+id/List_Pic"/>
@@ -18,13 +18,13 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:text="hello"
-            android:layout_margin="5dp"/>
+            android:layout_margin="4dp"/>
         <TextView
 
             android:layout_marginLeft="210dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="4dp"
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
