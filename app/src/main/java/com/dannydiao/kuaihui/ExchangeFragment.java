@@ -1,6 +1,8 @@
 package com.dannydiao.kuaihui;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -65,10 +67,10 @@ public class ExchangeFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
     }
 
@@ -113,7 +115,7 @@ public class ExchangeFragment extends Fragment {
                 String huobi_count = editText.getText().toString();
                 float huobi_count_1 = Float.valueOf(huobi_count);
 
-                String url = "http://api.k780.com/?app=finance.rate&scur=" + CurrencySelected + "&tcur=CNY,USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD" +
+                String url = "https://sapi.k780.com/?app=finance.rate&scur=" + CurrencySelected + "&tcur=CNY,USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD" +
                         "&appkey=42125&sign=bcb58eb83ab21f84f80881c1f36be84e";
                 OkHttpClient okHttpClient = new OkHttpClient();
                 final Request request = new Request.Builder()
