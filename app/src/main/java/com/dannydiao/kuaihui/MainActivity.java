@@ -1,6 +1,8 @@
 package com.dannydiao.kuaihui;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,12 +11,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     FragmentManager fragmentManager = getSupportFragmentManager();
     ExchangeFragment exchangeFragment = ExchangeFragment.newInstance("Context","Context");
     RateFragment rateFragment = RateFragment.newInstance("Context","Context");
     Fragment currentFragment = exchangeFragment;
+
+    public int Count = 0;
+
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -24,12 +31,14 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.bottom_exchange:
                     showFragment(exchangeFragment);
+                    Count++;
                     return true;
                 case R.id.bottom_rate:
                     showFragment(rateFragment);
                     return true;
 
             }
+
             return false;
         }
     };

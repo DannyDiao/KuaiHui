@@ -242,10 +242,17 @@ public class ExchangeFragment extends Fragment {
         Title.add("加拿大元 CAD");
         Title.add("澳大利亚元 AUD");
         Title.add("新台币 TWD");
+        Title.add("新台币 TWD");
+        Title.add("新台币 TWD");
+        Title.add("新台币 TWD");
+
 
     }
 
     public void initCurrency() {
+        Current.add("0");
+        Current.add("0");
+        Current.add("0");
         Current.add("0");
         Current.add("0");
         Current.add("0");

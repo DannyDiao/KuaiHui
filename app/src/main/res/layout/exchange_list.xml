@@ -7,7 +7,7 @@
             android:layout_width="21dp"
             android:layout_height="21dp"
 
-           android:layout_alignBottom="@id/List_Title"
+            android:layout_alignBottom="@id/List_Title"
             android:id="@+id/List_Pic"/>
         <TextView
             android:layout_toRightOf="@id/List_Pic"
