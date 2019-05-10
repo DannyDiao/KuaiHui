@@ -1,6 +1,8 @@
 package com.dannydiao.kuaihui;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -86,6 +88,16 @@ public class RateFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_rate, container, false);
 
+        //绑定关于TextView
+        TextView about = v.findViewById(R.id.about);
+        about.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+        about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),AboutActivity.class);
+                startActivity(intent);
+            }
+        });
 
         Boolean net = isNetworkConnected(getContext());
         Log.d("net",net.toString());

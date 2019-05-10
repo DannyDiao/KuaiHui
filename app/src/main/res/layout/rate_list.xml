@@ -2,10 +2,14 @@
     xmlns:android = "http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:layout_width="match_parent">
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="3dp">
     <ImageView
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:adjustViewBounds="true"
         android:layout_alignBottom="@id/List_Title_2"
         android:id="@+id/List_Pic_2"/>
     <TextView
@@ -39,5 +43,5 @@
         />
 
 
-
+</RelativeLayout>
 </RelativeLayout>

@@ -70,7 +70,7 @@
                     <Spinner
                         android:id="@+id/Currency_Selector"
                         android:layout_width="160dp"
-                        android:layout_height="50dp"></Spinner>
+                        android:layout_height="50dp" />
 
 
                     <EditText
@@ -80,7 +80,8 @@
                         android:layout_marginLeft="12dp"
                         android:layout_toRightOf="@id/Currency_Selector"
                         android:hint="货币数量"
-                        android:singleLine="true" />
+                        android:singleLine="true"
+                        android:digits="1234567890"/>
 
                 </RelativeLayout>
 

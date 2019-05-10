@@ -1,6 +1,7 @@
 package com.dannydiao.kuaihui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -8,12 +9,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,6 +24,7 @@ import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -37,6 +41,7 @@ import okhttp3.Response;
 
 
 public class ExchangeFragment extends Fragment {
+    private Context context;
     List<String> Title = new ArrayList<>();
     List<String> Current = new ArrayList<>();
     Spinner spinner;
@@ -71,7 +76,7 @@ public class ExchangeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        this.context = getActivity();
     }
 
     @Override
@@ -104,6 +109,7 @@ public class ExchangeFragment extends Fragment {
         //绑定edittext
         editText = v.findViewById(R.id.huobi_count);
         editText.clearFocus();
+        editText.setInputType(EditorInfo.TYPE_CLASS_PHONE);
         //绑定按钮
         exchangeButton = v.findViewById(R.id.exchange_button);
         //监听点击事件
@@ -112,7 +118,26 @@ public class ExchangeFragment extends Fragment {
             public void onClick(View v) {
                 //获取兑换货币数量
                 editText.clearFocus();
+
                 String huobi_count = editText.getText().toString();
+
+                if (huobi_count.equals("521521")){
+                    AlertDialog.Builder builder =
+                            new AlertDialog.Builder(getActivity()).setIcon(R.drawable.head)
+                            .setTitle("提问！").setMessage("张迷妮我爱你呀（づ￣3￣）づ╭❤～")
+                            .setPositiveButton("我也爱你!", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(getActivity(),"嘿嘿~",Toast.LENGTH_SHORT).show();
+                                }
+                            }).setNegativeButton("不爱了", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(getActivity(),"拜拜就拜拜，下一个更乖",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    builder.create().show();
+                }
                 float huobi_count_1 = Float.valueOf(huobi_count);
 
                 String url = "https://sapi.k780.com/?app=finance.rate&scur=" + CurrencySelected + "&tcur=CNY,USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD,VND,NZD,CHF" +
