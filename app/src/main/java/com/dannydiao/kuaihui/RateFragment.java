@@ -111,7 +111,7 @@ public class RateFragment extends Fragment {
             }
         };
 
-        String url = "https://sapi.k780.com/?app=finance.rate&scur=USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD,SGD,THB,MOP" + "&tcur=CNY" +
+        String url = "https://sapi.k780.com/?app=finance.rate&scur=USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD,SGD,THB,MOP,VND,NZD,CHF" + "&tcur=CNY" +
                 "&appkey=42125&sign=bcb58eb83ab21f84f80881c1f36be84e";
         OkHttpClient okHttpClient = new OkHttpClient();
         final Request request = new Request.Builder()
@@ -134,11 +134,11 @@ public class RateFragment extends Fragment {
                 String[] rate_split = result.split("\"rate\"");
                 int size = rate_split.length;
 
-                for (int i = 1; i < 13; i++) {
+                for (int i = 1; i < 16; i++) {
                     rate_final.add(rate_split[i].substring(2, 8));
                 }
 
-                for (int i = 0; i < 12; i++) {
+                for (int i = 0; i < 15; i++) {
                     Current.remove(i);
                     if (rate_final.get(i).equals("1\",\"up")) {
                         Current.add(i, "1");
@@ -148,7 +148,7 @@ public class RateFragment extends Fragment {
                 }
                 float temp;
 
-                for (int i = 0; i < 12; i++) {
+                for (int i = 0; i < 15; i++) {
                     temp = (float)Float.valueOf(Current.get(i)) * 100;
                     Current.remove(i);
                     //保留两位小数
@@ -188,11 +188,17 @@ public class RateFragment extends Fragment {
         Title.add("新加坡元 SGD");
         Title.add("泰铢 THB");
         Title.add("澳门元 MOP");
+        Title.add("越南盾 VND");
+        Title.add("新西兰元 NZD");
+        Title.add("瑞士法郎 CHF");
 
     }
 
     public void initCurrency() {
 
+        Current.add("0");
+        Current.add("0");
+        Current.add("0");
         Current.add("0");
         Current.add("0");
         Current.add("0");
