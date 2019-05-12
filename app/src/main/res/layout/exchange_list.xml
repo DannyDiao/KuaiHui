@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/List_Current"
             android:text="world"
+            android:singleLine="true"
             />
 
 

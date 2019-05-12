@@ -2,9 +2,6 @@ package com.dannydiao.kuaihui;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,16 +16,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +33,6 @@ import okhttp3.Response;
 
 
 public class ExchangeFragment extends Fragment {
-    private Context context;
     List<String> Title = new ArrayList<>();
     List<String> Current = new ArrayList<>();
     Spinner spinner;
@@ -53,10 +44,6 @@ public class ExchangeFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
 
     public ExchangeFragment() {
         // Required empty public constructor
@@ -76,7 +63,7 @@ public class ExchangeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.context = getActivity();
+
     }
 
     @Override
@@ -113,98 +100,76 @@ public class ExchangeFragment extends Fragment {
         //绑定按钮
         exchangeButton = v.findViewById(R.id.exchange_button);
         //监听点击事件
-        exchangeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //获取兑换货币数量
-                editText.clearFocus();
+        exchangeButton.setOnClickListener(v1 -> {
+            //获取兑换货币数量
+            editText.clearFocus();
 
-                String huobi_count = editText.getText().toString();
+            String huobi_count = editText.getText().toString();
+            float huobi_count_1 = Float.valueOf(huobi_count);
 
-                if (huobi_count.equals("521521")){
-                    AlertDialog.Builder builder =
-                            new AlertDialog.Builder(getActivity()).setIcon(R.drawable.head)
-                            .setTitle("提问！").setMessage("张迷妮我爱你呀（づ￣3￣）づ╭❤～")
-                            .setPositiveButton("我也爱你!", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(getActivity(),"嘿嘿~",Toast.LENGTH_SHORT).show();
-                                }
-                            }).setNegativeButton("不爱了", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(getActivity(),"拜拜就拜拜，下一个更乖",Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                    builder.create().show();
+            String url = "https://sapi.k780.com/?app=finance.rate&scur=" + CurrencySelected + "&tcur=CNY,USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD,VND,NZD,CHF,PHP" +
+                    "&appkey=42125&sign=bcb58eb83ab21f84f80881c1f36be84e";
+            OkHttpClient okHttpClient = new OkHttpClient();
+            final Request request = new Request.Builder()
+                    .url(url)
+                    .get()
+                    .build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
                 }
-                float huobi_count_1 = Float.valueOf(huobi_count);
 
-                String url = "https://sapi.k780.com/?app=finance.rate&scur=" + CurrencySelected + "&tcur=CNY,USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD,VND,NZD,CHF" +
-                        "&appkey=42125&sign=bcb58eb83ab21f84f80881c1f36be84e";
-                OkHttpClient okHttpClient = new OkHttpClient();
-                final Request request = new Request.Builder()
-                        .url(url)
-                        .get()
-                        .build();
-                Call call = okHttpClient.newCall(request);
-                call.enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String result = response.body().string();
+
+                    //解析出汇率结果
+                    List<String> rate_final = new ArrayList<>();
+                    String[] rate_split = result.split("\"rate\"");
+
+                    for (int i = 1; i < 15; i++) {
+                        rate_final.add(rate_split[i].substring(2, 8));
+                    }
+
+                    for (int i = 0; i < 14; i++) {
+                        Current.remove(i);
+                        if (rate_final.get(i).equals("1\",\"up")) {
+                            Current.add(i, "1");
+                        } else {
+                            Current.add(i, rate_final.get(i));
+                        }
+                    }
+                    float temp;
+
+                    for (int i = 0; i < 14; i++) {
+                        temp = Float.valueOf(Current.get(i)) * huobi_count_1;
+                        Current.remove(i);
+                        //保留两位小数
+                        temp = (float)(Math.round(temp*100))/100;
+                        Current.add(i,String.valueOf(temp));
 
                     }
 
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String result = response.body().string();
+                    //解析出刷新时间
+                    String[] refresh_time_split = result.split("\"update\":\"");
+                    String refresh_time1 = refresh_time_split[1].substring(0,19);
+                    //发送消息到主线程，通知刷新UI
+                    Message message = handler.obtainMessage();
+                    message.what = 1;
+                    message.obj = refresh_time1;
+                    handler.sendMessage(message);
 
-                        //解析出汇率结果
-                        List<String> rate_final = new ArrayList<>();
-                        String[] rate_split = result.split("\"rate\"");
-                        int size = rate_split.length;
-
-                        for (int i = 1; i < 14; i++) {
-                            rate_final.add(rate_split[i].substring(2, 8));
-                        }
-
-                        for (int i = 0; i < 13; i++) {
-                            Current.remove(i);
-                            if (rate_final.get(i).equals("1\",\"up")) {
-                                Current.add(i, "1");
-                            } else {
-                                Current.add(i, rate_final.get(i));
-                            }
-                        }
-                        float temp;
-
-                        for (int i = 0; i < 13; i++) {
-                            temp = (float)Float.valueOf(Current.get(i)) * huobi_count_1;
-                            Current.remove(i);
-                            //保留两位小数
-                            temp = (float)(Math.round(temp*100))/100;
-                            Current.add(i,String.valueOf(temp));
-
-                        }
-
-                        //解析出刷新时间
-                        String[] refresh_time_split = result.split("\"update\":\"");
-                        String refresh_time = refresh_time_split[1].substring(0,19);
-                        //发送消息到主线程，通知刷新UI
-                        Message message = handler.obtainMessage();
-                        message.what = 1;
-                        message.obj = refresh_time;
-                        handler.sendMessage(message);
-
-                    }
-                });
-            }
+                }
+            });
         });
 
 
         //适配Spinner
         spinner = v.findViewById(R.id.Currency_Selector);
-        String CurrencyItems[] = getResources().getStringArray(R.array.Currency_Selector);
-        ArrayAdapter<String> Adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, CurrencyItems);
+        String[] CurrencyItems = getResources().getStringArray(R.array.Currency_Selector);
+        ArrayAdapter<String> Adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, CurrencyItems);
         spinner.setAdapter(Adapter);
 
         //监听Spinner
@@ -280,24 +245,27 @@ public class ExchangeFragment extends Fragment {
         Title.add("越南盾 VND");
         Title.add("新西兰元 NZD");
         Title.add("瑞士法郎 CHF");
+        Title.add("菲律宾比索 PHP");
+
 
 
     }
 
     public void initCurrency() {
-        Current.add("0");
-        Current.add("0");
-        Current.add("0");
-        Current.add("0");
-        Current.add("0");
-        Current.add("0");
-        Current.add("0");
-        Current.add("0");
-        Current.add("0");
-        Current.add("0");
-        Current.add("0");
-        Current.add("0");
-        Current.add("0");
+        Current.add("");
+        Current.add("");
+        Current.add("");
+        Current.add("");
+        Current.add("");
+        Current.add("");
+        Current.add("");
+        Current.add("");
+        Current.add("");
+        Current.add("");
+        Current.add("");
+        Current.add("");
+        Current.add("");
+        Current.add("");
 
     }
 

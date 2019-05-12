@@ -65,6 +65,8 @@ public class ExchangeListAdapter extends RecyclerView.Adapter<ExchangeListAdapte
                 break;
             case 12:vh.Pic.setImageResource(R.drawable.chf);
                 break;
+            case 13:vh.Pic.setImageResource(R.drawable.php);
+                break;
         }
 
 

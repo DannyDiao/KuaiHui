@@ -74,6 +74,8 @@ public class RateListAdapter extends RecyclerView.Adapter<RateListAdapter.VH> {
                 break;
             case 14:vh.Pic.setImageResource(R.drawable.chf);
                 break;
+            case 15:vh.Pic.setImageResource(R.drawable.php);
+                break;
         }
     }
 
