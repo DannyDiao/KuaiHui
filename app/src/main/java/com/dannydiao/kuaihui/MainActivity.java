@@ -1,5 +1,8 @@
 package com.dannydiao.kuaihui;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -43,6 +46,18 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    public boolean isNetworkConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (mNetworkInfo != null) {
+                return mNetworkInfo.isAvailable();
+            }
+        }
+        return false;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction1 = fragmentManager.beginTransaction();
         transaction1.add(R.id.fragment_layout,exchangeFragment);
         transaction1.commit();
+
+        Boolean net = isNetworkConnected(getApplicationContext());
+        if (net == false){
+            Toast.makeText(getApplicationContext(),"无网络连接，请重试后重启应用",Toast.LENGTH_LONG).show();
+        }
     }
 
     private void showFragment(Fragment fg){

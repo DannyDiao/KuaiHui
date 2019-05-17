@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Message;
 import android.service.quicksettings.Tile;
 import android.support.design.widget.FloatingActionButton;
@@ -45,10 +46,6 @@ public class RateFragment extends Fragment {
     RecyclerView recyclerView;
 
 
-    private String mParam1;
-    private String mParam2;
-
-
 
     public RateFragment() {
         // Required empty public constructor
@@ -63,25 +60,9 @@ public class RateFragment extends Fragment {
         return fragment;
     }
 
-    public boolean isNetworkConnected(Context context) {
-        if (context != null) {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-            if (mNetworkInfo != null) {
-                return mNetworkInfo.isAvailable();
-            }
-        }
-        return false;
-    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
     }
 
     public Call AssembleCall(){
@@ -103,12 +84,9 @@ public class RateFragment extends Fragment {
         //绑定关于TextView
         TextView about = v.findViewById(R.id.about);
         about.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
-        about.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),AboutActivity.class);
-                startActivity(intent);
-            }
+        about.setOnClickListener(v12 -> {
+            Intent intent = new Intent(getActivity(),AboutActivity.class);
+            startActivity(intent);
         });
 
         initTitle();
@@ -118,9 +96,12 @@ public class RateFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         RateListAdapter rateListAdapter = new RateListAdapter(Title,Current,Hint);
         recyclerView.setAdapter(rateListAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
-
-        Handler handler = new Handler() {
+        if (getActivity() != null) {
+            recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
+        }
+        HandlerThread handlerThread = new HandlerThread("HandlerThread");
+        handlerThread.start();
+        Handler handler = new Handler(handlerThread.getLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -213,7 +194,7 @@ public class RateFragment extends Fragment {
                     float temp;
 
                     for (int i = 0; i < 16; i++) {
-                        temp = (float)Float.valueOf(Current.get(i)) * 100;
+                        temp = Float.valueOf(Current.get(i)) * 100;
                         Current.remove(i);
                         //保留两位小数
                         temp = (float)(Math.round(temp*100))/100;

@@ -1,12 +1,9 @@
 package com.dannydiao.kuaihui;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -102,9 +99,11 @@ public class ExchangeFragment extends Fragment {
         //监听点击事件
         exchangeButton.setOnClickListener(v1 -> {
             //获取兑换货币数量
-            editText.clearFocus();
-
             String huobi_count = editText.getText().toString();
+
+            if (huobi_count.equals("")){
+                Toast.makeText(getActivity(),"请输入有效数字",Toast.LENGTH_SHORT).show();
+            }else {
             float huobi_count_1 = Float.valueOf(huobi_count);
 
             String url = "https://sapi.k780.com/?app=finance.rate&scur=" + CurrencySelected + "&tcur=CNY,USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD,VND,NZD,CHF,PHP" +
@@ -163,7 +162,7 @@ public class ExchangeFragment extends Fragment {
 
                 }
             });
-        });
+        }});
 
 
         //适配Spinner
