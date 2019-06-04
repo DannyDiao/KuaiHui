@@ -2,6 +2,7 @@ package com.dannydiao.kuaihui;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -78,6 +79,7 @@ public class ExchangeFragment extends Fragment {
         ExchangeListAdapter exchangeListAdapter = new ExchangeListAdapter(Title, Current);
         recyclerView.setAdapter(exchangeListAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        exchangeListAdapter.notifyDataSetChanged();
 
 
         Handler handler = new Handler() {
@@ -123,10 +125,10 @@ public class ExchangeFragment extends Fragment {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String result = response.body().string();
-
                     //解析出汇率结果
                     List<String> rate_final = new ArrayList<>();
                     String[] rate_split = result.split("\"rate\"");
+
 
                     for (int i = 1; i < 15; i++) {
                         rate_final.add(rate_split[i].substring(2, 8));
@@ -168,9 +170,10 @@ public class ExchangeFragment extends Fragment {
         //适配Spinner
         spinner = v.findViewById(R.id.Currency_Selector);
         String[] CurrencyItems = getResources().getStringArray(R.array.Currency_Selector);
-        ArrayAdapter<String> Adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, CurrencyItems);
-        spinner.setAdapter(Adapter);
-
+        if (getActivity() != null) {
+            ArrayAdapter<String> Adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, CurrencyItems);
+            spinner.setAdapter(Adapter);
+        }
         //监听Spinner
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
