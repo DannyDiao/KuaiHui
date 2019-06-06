@@ -36,8 +36,7 @@ import okhttp3.Response;
 
 
 public class RateFragment extends Fragment {
-    String url = "https://sapi.k780.com/?app=finance.rate&scur=USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD,SGD,THB,MOP,VND,NZD,CHF,PHP" + "&tcur=CNY" +
-            "&appkey=42125&sign=bcb58eb83ab21f84f80881c1f36be84e";
+    String url = "https://diaosudev.cn:3500/KuaiHuiCurrency";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     List<String> Title = new ArrayList<>();
@@ -59,6 +58,7 @@ public class RateFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,9 +82,14 @@ public class RateFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_rate, container, false);
 
         //绑定关于TextView
-        TextView about = v.findViewById(R.id.about);
-        about.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
-        about.setOnClickListener(v12 -> {
+        FloatingActionButton fab_info = v.findViewById(R.id.float_button_info);
+        //TextView about = v.findViewById(R.id.about);
+        //about.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+//        about.setOnClickListener(v12 -> {
+//            Intent intent = new Intent(getActivity(),AboutActivity.class);
+//            startActivity(intent);
+//        });
+        fab_info.setOnClickListener(v12 -> {
             Intent intent = new Intent(getActivity(),AboutActivity.class);
             startActivity(intent);
         });
@@ -101,7 +106,7 @@ public class RateFragment extends Fragment {
         }
         HandlerThread handlerThread = new HandlerThread("HandlerThread");
         handlerThread.start();
-        Handler handler = new Handler(handlerThread.getLooper()) {
+        Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);

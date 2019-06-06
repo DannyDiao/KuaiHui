@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,10 +7,29 @@
     tools:context=".AboutActivity">
 
     <TextView
+        android:id="@+id/markdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="这里是关于界面"
         android:layout_margin="10dp"
-        android:id="@+id/markdown"/>
+        android:text="这里是关于界面"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/float_button_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="34dp"
+        android:layout_marginRight="34dp"
+        android:clickable="true"
+        android:src="@drawable/ic_back"
+        app:backgroundTint="#FFC107"
+        app:elevation="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:pressedTranslationZ="12dp"
+        app:rippleColor="#FFA000" />
+
+
+</android.support.constraint.ConstraintLayout>
