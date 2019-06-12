@@ -12,13 +12,20 @@ var app = express();
 var httpsServer = https.createServer(options,app);
 
 var CurrencyData = fs_1.readFileSync(CurrencyPath,'utf8');
-
-app.get('/KuaiHuiCurrency',function(req,res){
+var CurrencyinJson = JSON.parse(CurrencyData);
+console.log(CurrencyinJson.result.lists[0].ratenm);
+app.get('/KuaiHuiRate',function(req,res){
     console.log('received request');
-    res.send(CurrencyData);
+    var tempData;
+    var Datarray=[];
+    for(var i=0;CurrencyinJson.result.lists[i] != null;i++){
+      tempData = CurrencyinJson.result.lists[i].rate;
+      Datarray.push(tempData);
+    }
+    res.send(Datarray);
 });
 
 app.get('/KuaiHuiExchange',function(req,res){
-  
+    console.log(req.query.type);
 })
 httpsServer.listen(3500);

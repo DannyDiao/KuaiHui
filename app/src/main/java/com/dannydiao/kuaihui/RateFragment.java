@@ -24,6 +24,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,14 +39,13 @@ import okhttp3.Response;
 
 
 public class RateFragment extends Fragment {
-    String url = "https://diaosudev.cn:3500/KuaiHuiCurrency";
+    String url = "https://diaosudev.cn:3500/KuaiHuiRate";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     List<String> Title = new ArrayList<>();
     List<String> Current = new ArrayList<>();
     List<String> Hint = new ArrayList<>();
     RecyclerView recyclerView;
-
 
 
     public RateFragment() {
@@ -65,7 +67,7 @@ public class RateFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public Call AssembleCall(){
+    public Call AssembleCall() {
         OkHttpClient okHttpClient = new OkHttpClient();
         final Request request = new Request.Builder()
                 .url(url)
@@ -90,7 +92,7 @@ public class RateFragment extends Fragment {
 //            startActivity(intent);
 //        });
         fab_info.setOnClickListener(v12 -> {
-            Intent intent = new Intent(getActivity(),AboutActivity.class);
+            Intent intent = new Intent(getActivity(), AboutActivity.class);
             startActivity(intent);
         });
 
@@ -99,10 +101,10 @@ public class RateFragment extends Fragment {
         TextView refresh_time = v.findViewById(R.id.refresh_time_2);
         recyclerView = v.findViewById(R.id.recycler_view_2);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        RateListAdapter rateListAdapter = new RateListAdapter(Title,Current,Hint);
+        RateListAdapter rateListAdapter = new RateListAdapter(Title, Current, Hint);
         recyclerView.setAdapter(rateListAdapter);
         if (getActivity() != null) {
-            recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
+            recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
         }
         HandlerThread handlerThread = new HandlerThread("HandlerThread");
         handlerThread.start();
@@ -112,7 +114,7 @@ public class RateFragment extends Fragment {
                 super.handleMessage(msg);
                 if (msg.what == 1) {
                     rateListAdapter.notifyDataSetChanged();
-                    refresh_time.setText(msg.obj.toString());
+//                    refresh_time.setText(msg.obj.toString());
                 }
             }
         };
@@ -128,40 +130,23 @@ public class RateFragment extends Fragment {
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
 
-                //解析出汇率结果
-                List<String> rate_final = new ArrayList<>();
-                String[] rate_split = result.split("\"rate\"");
-
-                for (int i = 1; i < 17; i++) {
-                    rate_final.add(rate_split[i].substring(2, 8));
-                }
-
-                for (int i = 0; i < 16; i++) {
-                    Current.remove(i);
-                    if (rate_final.get(i).equals("1\",\"up")) {
-                        Current.add(i, "1");
-                    } else {
-                        Current.add(i, rate_final.get(i));
+                try {
+                    JSONArray jsonArray = new JSONArray(result);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        Current.remove(i);
+                        Current.add(i,jsonArray.getString(i));
                     }
-                }
-                float temp;
-
-                for (int i = 0; i < 16; i++) {
-                    temp = (float)Float.valueOf(Current.get(i)) * 100;
-                    Current.remove(i);
-                    //保留两位小数
-                    temp = (float)(Math.round(temp*100))/100;
-                    Current.add(i,String.valueOf(temp));
-
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
-                //解析出刷新时间
-                String[] refresh_time_split = result.split("\"update\":\"");
-                String refresh_time = refresh_time_split[1].substring(0,19);
+//                    //解析出刷新时间
+//                    String[] refresh_time_split = result.split("\"update\":\"");
+//                    String refresh_time1 = refresh_time_split[1].substring(0, 19);
                 //发送消息到主线程，通知刷新UI
                 Message message = handler.obtainMessage();
                 message.what = 1;
-                message.obj = refresh_time;
+//                    message.obj = refresh_time1;
                 handler.sendMessage(message);
 
 
@@ -180,40 +165,24 @@ public class RateFragment extends Fragment {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String result = response.body().string();
-                    //解析出汇率结果
-                    List<String> rate_final = new ArrayList<>();
-                    String[] rate_split = result.split("\"rate\"");
 
-                    for (int i = 1; i < 17; i++) {
-                        rate_final.add(rate_split[i].substring(2, 8));
-                    }
-
-                    for (int i = 0; i < 16; i++) {
-                        Current.remove(i);
-                        if (rate_final.get(i).equals("1\",\"up")) {
-                            Current.add(i, "1");
-                        } else {
-                            Current.add(i, rate_final.get(i));
+                    try {
+                        JSONArray jsonArray = new JSONArray(result);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            Current.remove(i);
+                            Current.add(i,jsonArray.getString(i));
                         }
-                    }
-                    float temp;
-
-                    for (int i = 0; i < 16; i++) {
-                        temp = Float.valueOf(Current.get(i)) * 100;
-                        Current.remove(i);
-                        //保留两位小数
-                        temp = (float)(Math.round(temp*100))/100;
-                        Current.add(i,String.valueOf(temp));
-
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
-                    //解析出刷新时间
-                    String[] refresh_time_split = result.split("\"update\":\"");
-                    String refresh_time1 = refresh_time_split[1].substring(0,19);
+//                    //解析出刷新时间
+//                    String[] refresh_time_split = result.split("\"update\":\"");
+//                    String refresh_time1 = refresh_time_split[1].substring(0, 19);
                     //发送消息到主线程，通知刷新UI
                     Message message = handler.obtainMessage();
                     message.what = 1;
-                    message.obj = refresh_time1;
+//                    message.obj = refresh_time1;
                     handler.sendMessage(message);
                 }
             });
@@ -266,8 +235,7 @@ public class RateFragment extends Fragment {
     }
 
 
-
-    }
+}
 
 
 
