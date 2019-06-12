@@ -25,6 +25,12 @@ app.get('/KuaiHuiRate',function(req,res){
     res.send(Datarray);
 });
 
+app.get('/KuaiHuiRateTime',function(req,res){
+    console.log('received time request');
+    var time = CurrencyinJson.result.lists[0].update;
+    res.send(time);
+})
+
 app.get('/KuaiHuiExchange',function(req,res){
     console.log(req.query.type);
 })
