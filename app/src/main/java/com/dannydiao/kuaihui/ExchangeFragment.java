@@ -130,6 +130,7 @@ public class ExchangeFragment extends Fragment {
                         String result = response.body().string();
                         String temp;
                         Float temp_1;
+                        String JsonRefreshTime_2="";
                         try {
                             JSONObject jsonObject = new JSONObject(result);
                             JSONObject JsonResult = jsonObject.getJSONObject("result");
@@ -140,7 +141,7 @@ public class ExchangeFragment extends Fragment {
                                 temp_1 = Float.valueOf(temp);
                                 temp_1 = huobi_count_1 * temp_1;
                                 temp = String.valueOf(temp_1);
-                                Current.add(i,temp);
+                                Current.add(i, temp);
                             }
 
                         } catch (Exception e) {
@@ -149,12 +150,20 @@ public class ExchangeFragment extends Fragment {
 
 
                         //解析出刷新时间
-                        String[] refresh_time_split = result.split("\"update\":\"");
-                        String refresh_time1 = refresh_time_split[1].substring(0, 19);
+                        try {
+                            JSONObject JsonRefreshTime = new JSONObject(result);
+                            JsonRefreshTime = JsonRefreshTime.getJSONObject("result");
+                            JSONArray JSONRefreshTime_1 = JsonRefreshTime.getJSONArray("lists");
+                            JsonRefreshTime_2 = JSONRefreshTime_1.getJSONObject(0).getString("update");
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                         //发送消息到主线程，通知刷新UI
                         Message message = handler.obtainMessage();
                         message.what = 1;
-                        message.obj = refresh_time1;
+                        message.obj = JsonRefreshTime_2;
                         handler.sendMessage(message);
 
                     }
