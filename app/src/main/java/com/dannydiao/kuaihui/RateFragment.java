@@ -39,9 +39,9 @@ import okhttp3.Response;
 
 
 public class RateFragment extends Fragment {
-    String url = "https://diaosudev.cn:3500/KuaiHuiRate";
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    String MainUrl = "https://diaosudev.cn:3500/KuaiHuiRate";
+    String GetRefreshTimeUrl = "https://diaosudev.cn:3500/KuaiHuiRateTime";
+
     List<String> Title = new ArrayList<>();
     List<String> Current = new ArrayList<>();
     List<String> Hint = new ArrayList<>();
@@ -55,8 +55,6 @@ public class RateFragment extends Fragment {
     public static RateFragment newInstance(String param1, String param2) {
         RateFragment fragment = new RateFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,14 +65,13 @@ public class RateFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public Call AssembleCall() {
+    public Call AssembleCall(String url) {
         OkHttpClient okHttpClient = new OkHttpClient();
         final Request request = new Request.Builder()
                 .url(url)
                 .get()
                 .build();
-        Call call = okHttpClient.newCall(request);
-        return call;
+        return okHttpClient.newCall(request);
     }
 
     @Override
@@ -114,12 +111,15 @@ public class RateFragment extends Fragment {
                 super.handleMessage(msg);
                 if (msg.what == 1) {
                     rateListAdapter.notifyDataSetChanged();
-//                    refresh_time.setText(msg.obj.toString());
+                    if (msg.obj != null) {
+                        refresh_time.setText(msg.obj.toString());
+
+                    }
                 }
             }
         };
 
-        Call call_final = AssembleCall();
+        Call call_final = AssembleCall(MainUrl);
         call_final.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -129,12 +129,12 @@ public class RateFragment extends Fragment {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
-
+                long StartTime = System.currentTimeMillis();
                 try {
                     JSONArray jsonArray = new JSONArray(result);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         Current.remove(i);
-                        Current.add(i,jsonArray.getString(i));
+                        Current.add(i, jsonArray.getString(i));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -148,14 +148,37 @@ public class RateFragment extends Fragment {
                 message.what = 1;
 //                    message.obj = refresh_time1;
                 handler.sendMessage(message);
+                long EndTime = System.currentTimeMillis();
+                long RunningTime = EndTime - StartTime;
 
+                Log.d("RunningTime_0", String.valueOf(StartTime));
+                Log.d("RunningTime_1", String.valueOf(EndTime));
+                Log.d("RunningTime_2", String.valueOf(RunningTime));
 
+            }
+        });
+
+        Call GetRefreshTimeCall = AssembleCall(GetRefreshTimeUrl);
+        GetRefreshTimeCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String refresh_time = response.body().string();
+                //发送消息到主线程，通知刷新UI
+                Message message = handler.obtainMessage();
+                message.what = 1;
+                message.obj = refresh_time;
+                handler.sendMessage(message);
             }
         });
 
         FloatingActionButton floatingActionButton = v.findViewById(R.id.float_button);
         floatingActionButton.setOnClickListener(v1 -> {
-            Call refresh_call = AssembleCall();
+            Call refresh_call = AssembleCall(MainUrl);
             refresh_call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
@@ -170,7 +193,7 @@ public class RateFragment extends Fragment {
                         JSONArray jsonArray = new JSONArray(result);
                         for (int i = 0; i < jsonArray.length(); i++) {
                             Current.remove(i);
-                            Current.add(i,jsonArray.getString(i));
+                            Current.add(i, jsonArray.getString(i));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
