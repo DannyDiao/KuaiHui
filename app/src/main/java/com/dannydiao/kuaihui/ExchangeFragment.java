@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,6 +129,8 @@ public class ExchangeFragment extends Fragment {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String result = response.body().string();
+                        long StartTime = System.currentTimeMillis();
+
                         String temp;
                         Float temp_1;
                         String JsonRefreshTime_2="";
@@ -166,6 +169,13 @@ public class ExchangeFragment extends Fragment {
                         message.obj = JsonRefreshTime_2;
                         handler.sendMessage(message);
 
+
+                        long EndTime = System.currentTimeMillis();
+                        long RunningTime = EndTime - StartTime;
+
+                        Log.d("RunningTime_0", String.valueOf(StartTime));
+                        Log.d("RunningTime_1", String.valueOf(EndTime));
+                        Log.d("RunningTime_2", String.valueOf(RunningTime));
                     }
                 });
             }

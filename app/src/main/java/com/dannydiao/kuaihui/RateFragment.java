@@ -129,7 +129,7 @@ public class RateFragment extends Fragment {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
-
+                long StartTime = System.currentTimeMillis();
                 try {
                     JSONArray jsonArray = new JSONArray(result);
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -148,7 +148,12 @@ public class RateFragment extends Fragment {
                 message.what = 1;
 //                    message.obj = refresh_time1;
                 handler.sendMessage(message);
+                long EndTime = System.currentTimeMillis();
+                long RunningTime = EndTime - StartTime;
 
+                Log.d("RunningTime_0", String.valueOf(StartTime));
+                Log.d("RunningTime_1", String.valueOf(EndTime));
+                Log.d("RunningTime_2", String.valueOf(RunningTime));
 
             }
         });
