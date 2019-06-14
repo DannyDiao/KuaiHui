@@ -19,6 +19,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,68 +106,61 @@ public class ExchangeFragment extends Fragment {
             //获取兑换货币数量
             String huobi_count = editText.getText().toString();
 
-            if (huobi_count.equals("")){
-                Toast.makeText(getActivity(),"请输入有效数字",Toast.LENGTH_SHORT).show();
-            }else {
-            float huobi_count_1 = Float.valueOf(huobi_count);
+            if (huobi_count.equals("")) {
+                Toast.makeText(getActivity(), "请输入有效数字", Toast.LENGTH_SHORT).show();
+            } else {
+                float huobi_count_1 = Float.valueOf(huobi_count);
 
-            String url = "https://sapi.k780.com/?app=finance.rate&scur=" + CurrencySelected + "&tcur=CNY,USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD,VND,NZD,CHF,PHP" +
-                    "&appkey=42125&sign=bcb58eb83ab21f84f80881c1f36be84e";
-            OkHttpClient okHttpClient = new OkHttpClient();
-            final Request request = new Request.Builder()
-                    .url(url)
-                    .get()
-                    .build();
-            Call call = okHttpClient.newCall(request);
-            call.enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
+                String url = "https://sapi.k780.com/?app=finance.rate&scur=" + CurrencySelected + "&tcur=CNY,USD,HKD,EUR,JPY,GBP,KRW,CAD,AUD,TWD,VND,NZD,CHF,PHP" +
+                        "&appkey=42125&sign=bcb58eb83ab21f84f80881c1f36be84e";
+                OkHttpClient okHttpClient = new OkHttpClient();
+                final Request request = new Request.Builder()
+                        .url(url)
+                        .get()
+                        .build();
+                Call call = okHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
 
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    String result = response.body().string();
-                    //解析出汇率结果
-                    List<String> rate_final = new ArrayList<>();
-                    String[] rate_split = result.split("\"rate\"");
-
-
-                    for (int i = 1; i < 15; i++) {
-                        rate_final.add(rate_split[i].substring(2, 8));
                     }
 
-                    for (int i = 0; i < 14; i++) {
-                        Current.remove(i);
-                        if (rate_final.get(i).equals("1\",\"up")) {
-                            Current.add(i, "1");
-                        } else {
-                            Current.add(i, rate_final.get(i));
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String result = response.body().string();
+                        String temp;
+                        Float temp_1;
+                        try {
+                            JSONObject jsonObject = new JSONObject(result);
+                            JSONObject JsonResult = jsonObject.getJSONObject("result");
+                            JSONArray JsonList = JsonResult.getJSONArray("lists");
+                            for (int i = 0; i < JsonList.length(); i++) {
+                                Current.remove(i);
+                                temp = JsonList.getJSONObject(i).getString("rate");
+                                temp_1 = Float.valueOf(temp);
+                                temp_1 = huobi_count_1 * temp_1;
+                                temp = String.valueOf(temp_1);
+                                Current.add(i,temp);
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
+
+
+                        //解析出刷新时间
+                        String[] refresh_time_split = result.split("\"update\":\"");
+                        String refresh_time1 = refresh_time_split[1].substring(0, 19);
+                        //发送消息到主线程，通知刷新UI
+                        Message message = handler.obtainMessage();
+                        message.what = 1;
+                        message.obj = refresh_time1;
+                        handler.sendMessage(message);
+
                     }
-                    float temp;
-
-                    for (int i = 0; i < 14; i++) {
-                        temp = Float.valueOf(Current.get(i)) * huobi_count_1;
-                        Current.remove(i);
-                        //保留两位小数
-                        temp = (float)(Math.round(temp*100))/100;
-                        Current.add(i,String.valueOf(temp));
-
-                    }
-
-                    //解析出刷新时间
-                    String[] refresh_time_split = result.split("\"update\":\"");
-                    String refresh_time1 = refresh_time_split[1].substring(0,19);
-                    //发送消息到主线程，通知刷新UI
-                    Message message = handler.obtainMessage();
-                    message.what = 1;
-                    message.obj = refresh_time1;
-                    handler.sendMessage(message);
-
-                }
-            });
-        }});
+                });
+            }
+        });
 
 
         //适配Spinner
@@ -248,7 +244,6 @@ public class ExchangeFragment extends Fragment {
         Title.add("新西兰元 NZD");
         Title.add("瑞士法郎 CHF");
         Title.add("菲律宾比索 PHP");
-
 
 
     }
