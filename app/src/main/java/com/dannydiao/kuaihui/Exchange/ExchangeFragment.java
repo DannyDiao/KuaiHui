@@ -1,8 +1,7 @@
-package com.dannydiao.kuaihui;
+package com.dannydiao.kuaihui.Exchange;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +18,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.dannydiao.kuaihui.Utils.DividerItemDecoration;
+import com.dannydiao.kuaihui.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

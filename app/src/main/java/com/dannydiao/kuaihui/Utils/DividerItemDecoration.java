@@ -1,4 +1,4 @@
-package com.dannydiao.kuaihui;
+package com.dannydiao.kuaihui.Utils;
 
 import android.content.Context;
 import android.content.res.TypedArray;
