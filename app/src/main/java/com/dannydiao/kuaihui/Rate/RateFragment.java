@@ -1,16 +1,10 @@
-package com.dannydiao.kuaihui;
+package com.dannydiao.kuaihui.Rate;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Paint;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.service.quicksettings.Tile;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,13 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.dannydiao.kuaihui.AboutActivity;
+import com.dannydiao.kuaihui.Utils.DividerItemDecoration;
+import com.dannydiao.kuaihui.R;
+
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
