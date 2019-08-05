@@ -3,6 +3,7 @@ package com.dannydiao.kuaihui.Exchange;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -84,7 +86,7 @@ public class ExchangeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         ExchangeListAdapter exchangeListAdapter = new ExchangeListAdapter(Title, Current);
         recyclerView.setAdapter(exchangeListAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        recyclerView.addItemDecoration(new DividerItemDecoration(Objects.requireNonNull(getActivity()), DividerItemDecoration.VERTICAL_LIST));
         exchangeListAdapter.notifyDataSetChanged();
 
 
@@ -124,13 +126,13 @@ public class ExchangeFragment extends Fragment {
                 Call call = okHttpClient.newCall(request);
                 call.enqueue(new Callback() {
                     @Override
-                    public void onFailure(Call call, IOException e) {
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
 
                     }
 
                     @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String result = response.body().string();
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                        String result = Objects.requireNonNull(response.body()).string();
                         long StartTime = System.currentTimeMillis();
 
                         String temp;

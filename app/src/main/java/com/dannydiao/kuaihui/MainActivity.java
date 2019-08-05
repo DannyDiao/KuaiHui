@@ -1,7 +1,6 @@
 package com.dannydiao.kuaihui;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -10,15 +9,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.annotation.NonNull;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.dannydiao.kuaihui.Exchange.ExchangeFragment;
 import com.dannydiao.kuaihui.Rate.RateFragment;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     FragmentManager fragmentManager = getSupportFragmentManager();
@@ -30,24 +25,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+            = item -> {
+                switch (item.getItemId()) {
+                    case R.id.bottom_exchange:
+                        showFragment(exchangeFragment);
+                        Count++;
+                        return true;
+                    case R.id.bottom_rate:
+                        showFragment(rateFragment);
+                        return true;
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.bottom_exchange:
-                    showFragment(exchangeFragment);
-                    Count++;
-                    return true;
-                case R.id.bottom_rate:
-                    showFragment(rateFragment);
-                    return true;
+                }
 
-            }
-
-            return false;
-        }
-    };
+                return false;
+            };
 
     public boolean isNetworkConnected(Context context) {
         if (context != null) {
@@ -74,24 +65,17 @@ public class MainActivity extends AppCompatActivity {
         transaction1.add(R.id.fragment_layout, exchangeFragment);
         transaction1.commit();
 
-        Boolean net = isNetworkConnected(getApplicationContext());
-        if (net == false) {
+        boolean net = isNetworkConnected(getApplicationContext());
+        if (!net) {
             Toast.makeText(getApplicationContext(), "无网络连接，请重试后重启应用", Toast.LENGTH_LONG).show();
         }
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-        Date date = new Date(System.currentTimeMillis());
-        String DateString = simpleDateFormat.format(date);
-        int DateInt = Integer.valueOf(DateString);
-        //Log.d("Date",String.valueOf(DateInt));
 
-        SharedPreferences sharedPreferences = getSharedPreferences("Main", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
 
 
     }
 
-    private void showFragment(Fragment fg) {
+    public void showFragment(Fragment fg) {
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
