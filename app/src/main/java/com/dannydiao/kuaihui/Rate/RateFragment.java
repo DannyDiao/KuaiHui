@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +25,7 @@ import org.json.JSONArray;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -69,7 +71,7 @@ public class RateFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_rate, container, false);
@@ -116,13 +118,13 @@ public class RateFragment extends Fragment {
         Call call_final = AssembleCall(MainUrl);
         call_final.enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
 
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String result = response.body().string();
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                String result = Objects.requireNonNull(response.body()).string();
                 long StartTime = System.currentTimeMillis();
                 try {
                     JSONArray jsonArray = new JSONArray(result);
@@ -155,13 +157,13 @@ public class RateFragment extends Fragment {
         Call GetRefreshTimeCall = AssembleCall(GetRefreshTimeUrl);
         GetRefreshTimeCall.enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
 
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String refresh_time = response.body().string();
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                String refresh_time = Objects.requireNonNull(response.body()).string();
                 //发送消息到主线程，通知刷新UI
                 Message message = handler.obtainMessage();
                 message.what = 1;
@@ -175,13 +177,13 @@ public class RateFragment extends Fragment {
             Call refresh_call = AssembleCall(MainUrl);
             refresh_call.enqueue(new Callback() {
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
 
                 }
 
                 @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    String result = response.body().string();
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    String result = Objects.requireNonNull(response.body()).string();
 
                     try {
                         JSONArray jsonArray = new JSONArray(result);

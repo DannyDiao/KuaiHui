@@ -44,7 +44,8 @@ public class RateListAdapter extends RecyclerView.Adapter<RateListAdapter.VH> {
     public void onBindViewHolder(@NonNull VH vh, int i) {
         vh.Title.setText(TitleArray.get(i));
         vh.Current.setText(CurrentArray.get(i));
-        vh.Hint.setText("1" + TitleArray.get(i) + "/人民币");
+        String text = "1" + TitleArray.get(i) + "/人民币";
+        vh.Hint.setText(text);
         switch (i){
             case 0:vh.Pic.setImageResource(R.drawable.usd);
                 break;

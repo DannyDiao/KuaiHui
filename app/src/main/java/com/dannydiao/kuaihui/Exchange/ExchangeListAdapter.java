@@ -20,8 +20,8 @@ public class ExchangeListAdapter extends RecyclerView.Adapter<ExchangeListAdapte
         public final ImageView Pic;
         public VH(View v){
             super(v);
-            Title = (TextView)v.findViewById(R.id.List_Title);
-            Current = (TextView)v.findViewById(R.id.List_Current);
+            Title = v.findViewById(R.id.List_Title);
+            Current = v.findViewById(R.id.List_Current);
             Pic = v.findViewById(R.id.List_Pic);
 
         }
@@ -30,7 +30,7 @@ public class ExchangeListAdapter extends RecyclerView.Adapter<ExchangeListAdapte
     private List<String> TitleArray;
     private List<String> CurrentArray;
 
-    public ExchangeListAdapter(List<String> data1,List<String> data2){
+    ExchangeListAdapter(List<String> data1, List<String> data2){
         this.TitleArray = data1;
         this.CurrentArray = data2;
     }
