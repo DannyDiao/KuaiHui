@@ -1,4 +1,4 @@
-package com.dannydiao.kuaihui.Rate;
+package com.dannydiao.kuaihui.rate;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dannydiao.kuaihui.AboutActivity;
-import com.dannydiao.kuaihui.Utils.DividerItemDecoration;
+import com.dannydiao.kuaihui.utils.DividerItemDecoration;
 import com.dannydiao.kuaihui.R;
 
 import org.json.JSONArray;

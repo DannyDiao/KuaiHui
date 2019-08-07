@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/icon_main_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Utils.LoadingView" android:theme="@style/TranslucentTheme"></activity>
+        <activity android:name=".utils.LoadingView" android:theme="@style/TranslucentTheme"></activity>
         <activity android:name=".AboutActivity" />
         <activity
             android:name=".MainActivity"

@@ -11,8 +11,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.dannydiao.kuaihui.Exchange.ExchangeFragment;
-import com.dannydiao.kuaihui.Rate.RateFragment;
+import com.dannydiao.kuaihui.exchange.ExchangeFragment;
+import com.dannydiao.kuaihui.rate.RateFragment;
 
 
 public class MainActivity extends AppCompatActivity {
