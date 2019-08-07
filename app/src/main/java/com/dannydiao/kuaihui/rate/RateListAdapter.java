@@ -1,4 +1,4 @@
-package com.dannydiao.kuaihui.Rate;
+package com.dannydiao.kuaihui.rate;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;

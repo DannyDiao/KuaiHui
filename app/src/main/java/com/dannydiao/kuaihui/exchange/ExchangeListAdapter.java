@@ -1,4 +1,4 @@
-package com.dannydiao.kuaihui.Exchange;
+package com.dannydiao.kuaihui.exchange;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;

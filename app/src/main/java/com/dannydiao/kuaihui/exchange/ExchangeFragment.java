@@ -1,13 +1,15 @@
-package com.dannydiao.kuaihui.Exchange;
+package com.dannydiao.kuaihui.exchange;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +22,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dannydiao.kuaihui.Utils.DividerItemDecoration;
+import com.dannydiao.kuaihui.utils.DividerItemDecoration;
 import com.dannydiao.kuaihui.R;
+import com.dannydiao.kuaihui.utils.LoadingView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -111,6 +114,13 @@ public class ExchangeFragment extends Fragment {
             //获取兑换货币数量
             String huobi_count = editText.getText().toString();
 
+            //跳转到LoadingView
+            Intent intent = new Intent(getActivity(), LoadingView.class);
+            startActivity(intent);
+            //取消切换到LoadingView的前置动画
+            Context context = getContext();
+            ((FragmentActivity) Objects.requireNonNull(context)).overridePendingTransition(0, 0);
+
             if (huobi_count.equals("")) {
                 Toast.makeText(getActivity(), "请输入有效数字", Toast.LENGTH_SHORT).show();
             } else {
@@ -137,7 +147,7 @@ public class ExchangeFragment extends Fragment {
 
                         String temp;
                         Float temp_1;
-                        String JsonRefreshTime_2="";
+                        String JsonRefreshTime_2 = "";
                         try {
                             JSONObject jsonObject = new JSONObject(result);
                             JSONObject JsonResult = jsonObject.getJSONObject("result");
@@ -174,15 +184,10 @@ public class ExchangeFragment extends Fragment {
                         handler.sendMessage(message);
 
 
-                        long EndTime = System.currentTimeMillis();
-                        long RunningTime = EndTime - StartTime;
-
-                        Log.d("RunningTime_0", String.valueOf(StartTime));
-                        Log.d("RunningTime_1", String.valueOf(EndTime));
-                        Log.d("RunningTime_2", String.valueOf(RunningTime));
                     }
                 });
             }
+
         });
 
 
