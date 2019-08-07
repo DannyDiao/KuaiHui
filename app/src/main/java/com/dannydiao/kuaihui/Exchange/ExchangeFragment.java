@@ -1,5 +1,6 @@
 package com.dannydiao.kuaihui.Exchange;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.dannydiao.kuaihui.Utils.DividerItemDecoration;
 import com.dannydiao.kuaihui.R;
+import com.dannydiao.kuaihui.Utils.LoadingView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -183,6 +185,10 @@ public class ExchangeFragment extends Fragment {
                     }
                 });
             }
+
+            Intent intent = new Intent(getActivity(), LoadingView.class);
+            startActivity(intent);
+
         });
 
 
