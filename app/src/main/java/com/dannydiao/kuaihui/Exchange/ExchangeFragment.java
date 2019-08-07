@@ -1,11 +1,14 @@
 package com.dannydiao.kuaihui.Exchange;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -188,6 +191,8 @@ public class ExchangeFragment extends Fragment {
 
             Intent intent = new Intent(getActivity(), LoadingView.class);
             startActivity(intent);
+            Context context = getContext();
+            ((FragmentActivity) context).overridePendingTransition(0,0);
 
         });
 
